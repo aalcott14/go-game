@@ -10,7 +10,8 @@ const (
 )
 
 type Game struct {
-	player *Player
+	player  *Player
+	bullets []*Bullet
 }
 
 func NewGame() *Game {
@@ -23,13 +24,25 @@ func NewGame() *Game {
 func (g *Game) Update() error {
 	g.player.Update()
 
+	for _, b := range g.bullets {
+		b.Update()
+	}
+
 	return nil
 }
 
 func (g *Game) Draw(screen *ebiten.Image) {
 	g.player.Draw(screen)
+
+	for _, b := range g.bullets {
+		b.Draw(screen)
+	}
 }
 
 func (g *Game) Layout(outsideWidth, outsideHeight int) (screenWidth, screenHeight int) {
 	return outsideWidth, outsideHeight
+}
+
+func (g *Game) AddBullet(b *Bullet) {
+	g.bullets = append(g.bullets, b)
 }

@@ -9,6 +9,7 @@ import (
 
 const (
 	rotationPerSecond = math.Pi
+	bulletSpawnOffset = 50.0
 )
 
 type Player struct {
@@ -47,6 +48,20 @@ func (p *Player) Update() {
 	}
 	if ebiten.IsKeyPressed(ebiten.KeyRight) {
 		p.rotation += speed
+	}
+
+	if ebiten.IsKeyPressed(ebiten.KeySpace) {
+		bounds := p.sprite.Bounds()
+		halfW := float64(bounds.Dx()) / 2
+		halfH := float64(bounds.Dy()) / 2
+
+		spawnPos := Vector{
+			p.position.X + halfW + math.Sin(p.rotation)*bulletSpawnOffset,
+			p.position.Y + halfH + math.Cos(p.rotation)*-bulletSpawnOffset,
+		}
+
+		bullet := NewBullet(spawnPos, p.rotation)
+		p.game.AddBullet(bullet)
 	}
 }
 
