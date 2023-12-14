@@ -1,6 +1,8 @@
 package game
 
 import (
+	"time"
+
 	"github.com/hajimehoshi/ebiten/v2"
 )
 
@@ -8,18 +10,21 @@ const (
 	screenWidth        = 800
 	screenHeight       = 600
 	baseMeteorVelocity = 0.25
+	meteorSpawnTime    = 1 * time.Second
 )
 
 type Game struct {
-	player       *Player
-	bullets      []*Bullet
-	meteors      []*Meteor
-	baseVelocity float64
+	player           *Player
+	bullets          []*Bullet
+	meteors          []*Meteor
+	baseVelocity     float64
+	meteorSpawnTimer *Timer
 }
 
 func NewGame() *Game {
 	g := &Game{
-		baseVelocity: baseMeteorVelocity,
+		baseVelocity:     baseMeteorVelocity,
+		meteorSpawnTimer: NewTimer(meteorSpawnTime),
 	}
 	g.player = NewPlayer(g)
 
@@ -28,6 +33,14 @@ func NewGame() *Game {
 
 func (g *Game) Update() error {
 	g.player.Update()
+
+	g.meteorSpawnTimer.Update()
+	if g.meteorSpawnTimer.IsReady() {
+		g.meteorSpawnTimer.Reset()
+
+		m := NewMeteor(g.baseVelocity)
+		g.meteors = append(g.meteors, m)
+	}
 
 	for _, b := range g.bullets {
 		b.Update()
