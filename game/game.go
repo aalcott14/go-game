@@ -5,17 +5,22 @@ import (
 )
 
 const (
-	screenWidth  = 800
-	screenHeight = 600
+	screenWidth        = 800
+	screenHeight       = 600
+	baseMeteorVelocity = 0.25
 )
 
 type Game struct {
-	player  *Player
-	bullets []*Bullet
+	player       *Player
+	bullets      []*Bullet
+	meteors      []*Meteor
+	baseVelocity float64
 }
 
 func NewGame() *Game {
-	g := &Game{}
+	g := &Game{
+		baseVelocity: baseMeteorVelocity,
+	}
 	g.player = NewPlayer(g)
 
 	return g
@@ -28,6 +33,10 @@ func (g *Game) Update() error {
 		b.Update()
 	}
 
+	for _, m := range g.meteors {
+		m.Update()
+	}
+
 	return nil
 }
 
@@ -36,6 +45,10 @@ func (g *Game) Draw(screen *ebiten.Image) {
 
 	for _, b := range g.bullets {
 		b.Draw(screen)
+	}
+
+	for _, m := range g.meteors {
+		m.Draw(screen)
 	}
 }
 
