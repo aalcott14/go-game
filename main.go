@@ -1,8 +1,7 @@
 package main
 
 import (
-	"game/game"
-
+	"github.com/aalcott14/go-game/game"
 	"github.com/hajimehoshi/ebiten/v2"
 )
 

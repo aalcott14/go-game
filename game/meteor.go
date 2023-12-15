@@ -1,10 +1,10 @@
 package game
 
 import (
-	"game/assets"
 	"math"
 	"math/rand"
 
+	"github.com/aalcott14/go-game/assets"
 	"github.com/hajimehoshi/ebiten/v2"
 )
 

@@ -1,4 +1,4 @@
-module game
+module github.com/aalcott14/go-game
 
 go 1.21.3
 
