@@ -66,6 +66,13 @@ func (g *Game) Update() error {
 		}
 	}
 
+	for _, m := range g.meteors {
+		if m.Collider().Intersects(g.player.Collider()) {
+			g.Reset()
+			break
+		}
+	}
+
 	return nil
 }
 
@@ -89,4 +96,13 @@ func (g *Game) Layout(outsideWidth, outsideHeight int) (screenWidth, screenHeigh
 
 func (g *Game) AddBullet(b *Bullet) {
 	g.bullets = append(g.bullets, b)
+}
+
+func (g *Game) Reset() {
+	g.player = NewPlayer(g)
+	g.meteors = nil
+	g.bullets = nil
+	g.score = 0
+	g.meteorSpawnTimer.Reset()
+	g.baseVelocity = baseMeteorVelocity
 }
