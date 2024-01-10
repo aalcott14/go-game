@@ -50,6 +50,15 @@ func (g *Game) Update() error {
 		m.Update()
 	}
 
+	for i, m := range g.meteors {
+		for j, b := range g.bullets {
+			if m.Collider().Intersects(b.Collider()) {
+				g.meteors = append(g.meteors[:i], g.meteors[i+1:]...)
+				g.bullets = append(g.bullets[:j], g.bullets[j+1:]...)
+			}
+		}
+	}
+
 	return nil
 }
 
