@@ -2,22 +2,24 @@ package game
 
 import (
 	"math"
+	"time"
 
 	"github.com/aalcott14/go-game/assets"
 	"github.com/hajimehoshi/ebiten/v2"
 )
 
 const (
+	shootCooldown     = time.Millisecond * 500
 	rotationPerSecond = math.Pi
 	bulletSpawnOffset = 50.0
 )
 
 type Player struct {
-	game *Game
-
-	position Vector
-	rotation float64
-	sprite   *ebiten.Image
+	game          *Game
+	position      Vector
+	rotation      float64
+	sprite        *ebiten.Image
+	shootCooldown *Timer
 }
 
 func NewPlayer(game *Game) *Player {
@@ -33,10 +35,11 @@ func NewPlayer(game *Game) *Player {
 	}
 
 	return &Player{
-		game:     game,
-		position: pos,
-		rotation: 0,
-		sprite:   sprite,
+		game:          game,
+		position:      pos,
+		rotation:      0,
+		sprite:        sprite,
+		shootCooldown: NewTimer(shootCooldown),
 	}
 }
 
@@ -50,7 +53,10 @@ func (p *Player) Update() {
 		p.rotation += speed
 	}
 
-	if ebiten.IsKeyPressed(ebiten.KeySpace) {
+	p.shootCooldown.Update()
+	if p.shootCooldown.IsReady() && ebiten.IsKeyPressed(ebiten.KeySpace) {
+		p.shootCooldown.Reset()
+
 		bounds := p.sprite.Bounds()
 		halfW := float64(bounds.Dx()) / 2
 		halfH := float64(bounds.Dy()) / 2
