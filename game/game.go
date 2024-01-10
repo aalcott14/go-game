@@ -1,9 +1,13 @@
 package game
 
 import (
+	"fmt"
+	"image/color"
 	"time"
 
+	"github.com/aalcott14/go-game/assets"
 	"github.com/hajimehoshi/ebiten/v2"
+	"github.com/hajimehoshi/ebiten/v2/text"
 )
 
 const (
@@ -19,12 +23,14 @@ type Game struct {
 	meteors          []*Meteor
 	baseVelocity     float64
 	meteorSpawnTimer *Timer
+	score            int
 }
 
 func NewGame() *Game {
 	g := &Game{
 		baseVelocity:     baseMeteorVelocity,
 		meteorSpawnTimer: NewTimer(meteorSpawnTime),
+		score:            0,
 	}
 	g.player = NewPlayer(g)
 
@@ -55,6 +61,7 @@ func (g *Game) Update() error {
 			if m.Collider().Intersects(b.Collider()) {
 				g.meteors = append(g.meteors[:i], g.meteors[i+1:]...)
 				g.bullets = append(g.bullets[:j], g.bullets[j+1:]...)
+				g.score++
 			}
 		}
 	}
@@ -72,6 +79,8 @@ func (g *Game) Draw(screen *ebiten.Image) {
 	for _, m := range g.meteors {
 		m.Draw(screen)
 	}
+
+	text.Draw(screen, fmt.Sprintf("%06d", g.score), assets.ScoreFont, screenWidth/2-100, 50, color.White)
 }
 
 func (g *Game) Layout(outsideWidth, outsideHeight int) (screenWidth, screenHeight int) {
