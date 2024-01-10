@@ -7,7 +7,7 @@ import (
 
 func main() {
 	g := game.NewGame()
-
+	ebiten.SetWindowTitle("Adam's Go Game")
 	err := ebiten.RunGame(g)
 	if err != nil {
 		panic(err)
