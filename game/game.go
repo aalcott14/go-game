@@ -80,7 +80,7 @@ func (g *Game) Draw(screen *ebiten.Image) {
 		m.Draw(screen)
 	}
 
-	text.Draw(screen, fmt.Sprintf("%06d", g.score), assets.ScoreFont, screenWidth/2-100, 50, color.White)
+	text.Draw(screen, fmt.Sprintf("%s\n%03d", "SCORE", g.score), assets.ScoreFont, screenWidth/2+90, 30, color.White)
 }
 
 func (g *Game) Layout(outsideWidth, outsideHeight int) (screenWidth, screenHeight int) {

@@ -10,7 +10,7 @@ import (
 
 const (
 	shootCooldown     = time.Millisecond * 500
-	rotationPerSecond = 5.0
+	rotationPerSecond = 4.0
 	bulletSpawnOffset = 50.0
 )
 
@@ -26,8 +26,8 @@ func NewPlayer(game *Game) *Player {
 	sprite := assets.PlayerSprite
 
 	bounds := sprite.Bounds()
-	halfW := float64(bounds.Dx()) / 2
-	halfH := float64(bounds.Dy()) / 2
+	halfW := float64(bounds.Dx()) + 25
+	halfH := float64(bounds.Dy()) + 25
 
 	pos := Vector{
 		X: screenWidth/2 - halfW,
